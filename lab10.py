@@ -7,11 +7,11 @@ from scipy.interpolate import approximate_taylor_polynomial
 x = sp.symbols('x')
 f = x**2 * sp.sin(2*x)
 
-# Знаходимо перші три похідні
+# Знаходимо чотири похідні
 f1 = sp.diff(f, x)
 f2 = sp.diff(f1, x)
 f3 = sp.diff(f2, x)
-f4 = sp.diff(f3, x)  # Четверта похідна
+f4 = sp.diff(f3, x)  
 
 # Виводимо похідні
 print("f'(x) =", f1)

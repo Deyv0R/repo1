@@ -1,10 +1,6 @@
 import numpy as np
 
 # Задаємо матрицю 3*3
-m_sqr_arr = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]]) 
-print(m_sqr_arr)
-
-# Ще один варіант як задати матрицю
 m_sqr_mx = np.matrix([[1, 2, 3], [4, 5, 6], [7, 8, 9]]) 
 print(m_sqr_mx)
 
