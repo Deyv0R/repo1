@@ -2,7 +2,7 @@ import simpy
 import random
 import matplotlib.pyplot as plt
 
-# Параметри варіанту 12 (модифіковані)
+# Параметри варіанту 12
 ARRIVAL_RATE = 6  # Збільшено вдвічі
 NUM_SERVERS = 75   # Для стаціонарного режиму
 PROBABILITIES = {1: 0.7, 2: 0.3} # Типи сутностей
@@ -14,18 +14,20 @@ length_queue = []
 
 def entity(env, name, server, ent_type):
     arrival_time = env.now
+    T_max = 50  # Поріг терпіння клієнта
     
-    # Завдання 6: Обмеження часу очікування
     with server.request() as request:
-        results = yield request | env.timeout(MAX_WAIT_TIME)
+        # Чекаємо або звільнення сервера, або закінчення терпіння
+        results = yield request | env.timeout(T_max)
         
         if request in results:
+            # Заявка дочекалася обслуговування
             wait_time = env.now - arrival_time
-            # Моделювання обслуговування
             service_time = random.expovariate(1.0 / TIME_SERVICING[ent_type])
             yield env.timeout(service_time)
         else:
-            print(f"Сутність {name} (Тип {ent_type}) пішла через довге очікування")
+            # Заявка пішла з черги (Reneging)
+            print(f"Заявка {name} покинула чергу через {T_max} сек. очікування")
 
 def monitor(env, server):
     while True:
@@ -48,7 +50,7 @@ env.process(arrival_generator(env, server))
 env.process(monitor(env, server))
 env.run(until=500)
 
-# Візуалізація (Завдання 2.25-2.33)
+# Візуалізація
 plt.figure(figsize=(10, 5))
 plt.plot(time_stamps, length_queue, label='Довжина черги')
 plt.xlabel('Час (секунди)')
